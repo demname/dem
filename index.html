@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .main{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <pre class="code1">
+            using System.Collections;
+            using System.Collections.Generic;
+            using UnityEngine;
+            using UnityEngine.UI;
+            using UnityEngine.SceneManagement;
+            
+            public class EntryScipt : MonoBehaviour
+            {
+                [SerializeField] InputField Login;
+                [SerializeField] InputField Password;
+                [SerializeField] GameObject Menu;
+                [SerializeField] Text ErrorText;
+            
+                public void CheckAccess()
+                {
+                    if (Login.text == "user" && Password.text == "user")
+                    {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                        Menu.SetActive(false);
+                    }
+                    else
+                    {
+                        ErrorText.text = "Неверные данные";
+                    }
+                }
+            }               
+        </pre>
+        <pre>
+            using System.Collections.Generic;
+            using Unity.VisualScripting;
+            using UnityEngine;
+            using UnityEngine.Tilemaps;
+            
+            public class FillTileMap : MonoBehaviour
+            {
+                [SerializeField] Tilemap TilemapSand;
+                [SerializeField] Tilemap TilemapStones;
+                [SerializeField] List<Tile> StonesList;
+                [SerializeField] Tile Tile;
+                [SerializeField] GameObject BuildMenu;
+            
+                public int StartX = -60;
+                public int StartY = -60;
+            
+                void Start()
+                {
+                    FillSand();
+                    FillStones();
+                }
+            
+                public void BuildMenuONOFF()
+                {
+                    BuildMenu.SetActive(!BuildMenu.activeSelf);
+                }
+            
+                private void Update()
+                {
+                    if (Input.GetKey(KeyCode.LeftControl))
+                    {
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            Vector3Int loc = TilemapStones.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                            loc.z = 0;
+                            TilemapStones.SetTile(loc, null);
+                        }
+                    }
+                }
+                void FillSand()
+                {
+                    for (int x = StartX; x < StartX + 100; x++)
+                    {
+                        for (int y = StartY; y < StartY + 100; y++)
+                        {
+                            TilemapSand.SetTile(new Vector3Int(x, y, 0), Tile);
+            
+                        }
+                    }
+                }
+            
+                void FillStones()
+                {
+                    for (int x = StartX; x < StartX + 100; x++)
+                    {
+                        for (int y = StartY; y < StartY + 100; y++)
+                        {
+                            if (Random.Range(0, 10) == 1)
+                            {
+                                TilemapStones.SetTile(new Vector3Int(x, y, 0), StonesList[Random.Range(0, StonesList.Count)]);
+                            }
+            
+                        }
+                    }
+                }
+            }            
+        </pre>
+        <img src="img/button.png" alt="">
+        <img src="img/input.png" alt="">
+    </div>
+</body>
+</html>
